@@ -5,14 +5,22 @@
 # TL;DR;
 
 ```bash
-$ docker run --name cassandra bitnami/cassandra:latest
-```
-
-## Docker Compose
-
-```bash
-$ curl -sSL https://raw.githubusercontent.com/bitnami/bitnami-docker-cassandra/master/docker-compose.yml > docker-compose.yml
-$ docker-compose up -d
+$ docker-compose build  # Build containers (see directories cassandra and cassandra-jdbc-client)
+$ docker-compose up -d  # Run containers as daemons
+$
+$ sleep 60              # Wait a minute till Cassandra server starts
+$
+$                       # Stress test Cassandra creating blogposts table and writing the contents
+$ docker-compose exec cassandra /tmp/stress-write.sh
+$
+$                       # Stress test Cassandra reading the contents of the table (optional)
+$ docker-compose exec cassandra /tmp/stress-read.sh
+$
+$                       # Run query against JDBC Cassandra connector from other container
+$ echo '(jdbc/query cassandra-db ["select * from blogposts limit 1"])' | docker-compose exec -T cassandra-jdbc-client lein repl
+$                       # It is okay if some CLI artifacts outputted - it is the contents of the table's first row
+$
+$ docker-compose rm -fs # Stop and remove containers when done
 ```
 
 # Why use Bitnami Images?

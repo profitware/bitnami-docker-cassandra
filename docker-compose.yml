@@ -2,7 +2,7 @@ version: '2'
 
 services:
   cassandra:
-    image: 'bitnami/cassandra:3'
+    build: ./cassandra
     ports:
       - '7000:7000'
       - '9042:9042'
@@ -12,6 +12,15 @@ services:
       - CASSANDRA_SEEDS=cassandra
       - CASSANDRA_PASSWORD_SEEDER=yes
       - CASSANDRA_PASSWORD=cassandra
+  cassandra-jdbc-client:
+    build: ./cassandra-jdbc-client
+    stdin_open: true
+    tty: true
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_HOST=cassandra
 volumes:
   cassandra_data:
     driver: local
