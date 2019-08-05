@@ -21,6 +21,18 @@ services:
       - CASSANDRA_PASSWORD_SEEDER=yes
       - CASSANDRA_PASSWORD=cassandra
       - CASSANDRA_HOST=cassandra
+  cassandra-odbc-client:
+    build: ./cassandra-odbc-client
+    stdin_open: true
+    tty: true
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_HOST=cassandra
+      - ODBCINI=/opt/simba/cassandraodbc/Setup/odbc.ini
+      - ODBCSYSINI=/opt/simba/cassandraodbc/Setup/
+      - SIMBACASSANDRAODBC=/opt/simba/cassandraodbc/lib/64/simba.cassandraodbc.ini
 volumes:
   cassandra_data:
     driver: local

@@ -4,6 +4,8 @@
 
 # TL;DR;
 
+To build cassandra-odbc-client image you need to download *.rpm file which contains Simba driver for cassandra from official site: https://www.simba.com/drivers/cassandra-odbc-jdbc/. You need to register and place order (Free Trial). After that, you should place your RPM package as well as license file *.lic in the same folder of Dockerfile e.g. /cassandra-odbc-client
+
 ```bash
 $ docker-compose build  # Build containers (see directories cassandra and cassandra-jdbc-client)
 $ docker-compose up -d  # Run containers as daemons
@@ -18,6 +20,10 @@ $ docker-compose exec cassandra /tmp/stress-read.sh
 $
 $                       # Run query against JDBC Cassandra connector from other container
 $ echo '(jdbc/query cassandra-db ["select * from blogposts limit 1"])' | docker-compose exec -T cassandra-jdbc-client lein repl
+$                       # It is okay if some CLI artifacts outputted - it is the contents of the table's first row
+$
+$                       # Run query against ODBC Cassandra connector from other container
+$ echo 'SELECT * FROM blogposts LIMIT 1' | docker-compose exec -T cassandra-odbc-client isql cassandraSimba64
 $                       # It is okay if some CLI artifacts outputted - it is the contents of the table's first row
 $
 $ docker-compose rm -fs # Stop and remove containers when done
